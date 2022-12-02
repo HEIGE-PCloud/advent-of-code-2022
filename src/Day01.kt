@@ -2,22 +2,29 @@ fun main() {
   /**
    * Convert the list of input to a list of calories
    */
-  fun toCalories(input: List<String>): List<Int> = input
-    .flatMapIndexed { index, x ->
-      when {
-        index == 0 || index == input.lastIndex -> listOf(index)
-        x.isEmpty() -> listOf(index - 1, index + 1)
-        else -> emptyList()
+  fun toCalories(input: List<String>): List<Int> =
+    input
+      .fold(
+        Pair<List<List<String>>, List<String>>(
+          emptyList(),
+          emptyList()
+        )
+      ) { (acc, cur), str ->
+        when {
+          str == input.last() -> Pair(
+            acc.plusElement(cur.plus(str)),
+            emptyList()
+          )
+          str.isBlank() -> Pair(acc.plusElement(cur), emptyList())
+          else -> Pair(acc, cur.plus(str))
+        }
       }
-    }
-    .windowed(size = 2, step = 2) { (from, to) ->
-      input.slice(from..to)
-    }
-    .map {
-      it.fold(0) { acc, s ->
-        acc + Integer.parseInt(s)
+      .first
+      .map {
+        it.fold(0) { acc, s ->
+          acc + Integer.parseInt(s)
+        }
       }
-    }
 
   fun part1(input: List<String>): Int =
     toCalories(input).max()
