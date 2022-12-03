@@ -1,5 +1,4 @@
 fun main() {
-
   fun slice(str: String): Pair<String, String> = Pair(
     str.slice(0 until str.length / 2),
     str.slice(str.length / 2 until str.length)
@@ -10,7 +9,8 @@ fun main() {
     else -> item.code - 'A'.code + 27
   }
 
-  fun part1(input: List<String>): Int = input.fold(0) { acc, str ->
+  fun part1(input: List<String>): Int =
+    input.fold(0) { acc, str ->
     val (s1, s2) = slice(str)
     val map = s1.map { it to true }.toMap()
     val item = s2.find { map[it] == true }!!
@@ -28,7 +28,6 @@ fun main() {
         val ans = map.filterValues { it == 3 }.keys.toList()[0]
         acc + priority(ans)
       }
-
 
   val testInput = readInput("Day03_test")
   check(part1(testInput) == 157)
